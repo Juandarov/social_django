@@ -42,10 +42,16 @@ INSTALLED_APPS = [
     'djangobower',
     'django_extensions',
 
-    'people'
+    'people',
 
 
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django.contrib.sites',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -62,7 +68,7 @@ ROOT_URLCONF = 'social_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'social_project', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,5 +130,39 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
+LOGIN_REDIRECT_URL = "/"
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+AUTHENTICATION_BACKENDS = (
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'sass_processor.finders.CssFinder',
+    'djangobower.finders.BowerFinder',
+]
+
+BOWER_INSTALLED_APPS = (
+   'jquery',
+   'bootstrap-sass',
+   'bootstrap',
+   'fontawesome',
+)
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, "static")
+
+SASS_PROCESSOR_INCLUDE_DIRS = [
+    os.path.join(BASE_DIR, "people", "static", "sass"),
+    os.path.join(BASE_DIR, "social_project", "static"),
+    os.path.join(BASE_DIR, "static/bower_components/bootstrap-sass/assets/stylesheets"),
+]
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
